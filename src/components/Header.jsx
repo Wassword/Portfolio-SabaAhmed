@@ -1,72 +1,81 @@
 import { Navbar, Nav, Container } from 'react-bootstrap';
 import { FaLinkedin, FaGithub, FaEnvelope } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
+import MyAvatar from './Avatar';
 
 const Header = () => {
-    const [isScrolled, setIsScrolled] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            if (window.scrollY > 0) {
-                setIsScrolled(true);
+            const offset = window.scrollY;
+            if (offset > 50) {
+                setScrolled(true);
             } else {
-                setIsScrolled(false);
+                setScrolled(false);
             }
         };
 
         window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
     }, []);
 
     return (
-        <header>
+        <header className={`header ${scrolled ? 'scrolled' : ''}`}>
             <Navbar expand="lg" className="navbar-custom" fixed="top">
-                <Container fluid>
-                    <Navbar.Brand href="#home" className="brand-initials">
-                        SA.
+                <Container>
+                    <Navbar.Brand href="#hero" className="brand-logo">
+                        <svg width="50" height="50" viewBox="0 0 50 50">
+                            <path 
+                                d="M10 25C10 15 15 10 25 10C35 10 40 15 40 20C40 25 35 30 25 30C15 30 10 35 10 40C10 45 15 50 25 50C35 50 40 45 40 40" 
+                                stroke="#C4A484" 
+                                fill="none" 
+                                strokeWidth="2"
+                            />
+                            <text x="15" y="35" fill="#C4A484" fontSize="24" fontWeight="bold">SA</text>
+                        </svg>
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="ms-auto">
-                            <Nav.Link href="#home" className="nav-link-custom">Home</Nav.Link>
-                            <Nav.Link href="#about" className="nav-link-custom">About</Nav.Link>
-                            <Nav.Link href="#resume" className="nav-link-custom">Resume</Nav.Link>
-                            <Nav.Link href="#skills" className="nav-link-custom">Skills</Nav.Link>
-                            <Nav.Link href="#projects" className="nav-link-custom">Projects</Nav.Link>
-                            <Nav.Link href="#contact" className="nav-link-custom">Contact</Nav.Link>
+                        <Nav className="ms-auto nav-links">
+                            <Nav.Link href="#hero">Home</Nav.Link>
+                            <Nav.Link href="#about">About</Nav.Link>
+                            <Nav.Link 
+                                href="/sabaahmed_portfolio/resume/Sabaahmed.pdf"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Resume
+                            </Nav.Link>
+                            <Nav.Link 
+                                href="#work"
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById('work').scrollIntoView({ 
+                                        behavior: 'smooth' 
+                                    });
+                                }}
+                            >
+                                Work
+                            </Nav.Link>
+                            <Nav.Link 
+                                href="#contact" 
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    document.getElementById('contact').scrollIntoView({ 
+                                        behavior: 'smooth' 
+                                    });
+                                }}
+                            >
+                                Contact
+                            </Nav.Link>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
-            <div className="hero-section">
-                <div className="hero-content">
-                    <h1>
-                        {'Hello!'.split('').map((letter, index) => (
-                            <span 
-                                key={index} 
-                                className={`jumping-letter ${isScrolled ? 'paused' : ''}`}
-                            >
-                                {letter}
-                            </span>
-                        ))}
-                    </h1>
-                    <h2>I'm Saba Ahmed</h2>
-                    <p className="lead">Full-Stack Programmer</p>
-                    
-                    <div className="social-icons">
-                        <a href="https://www.linkedin.com/in/sabaahmed7/" target="_blank" rel="noopener noreferrer">
-                            <FaLinkedin />
-                        </a>
-                        <a href="mailto:ahmedsaba271@gmail.com">
-                            <FaEnvelope />
-                        </a>
-                        <a href="https://github.com/Wassword?tab=repositories" target="_blank" rel="noopener noreferrer">
-                            <FaGithub />
-                        </a>
-                    </div>
-                </div>
-            </div>
         </header>
     );
 };
